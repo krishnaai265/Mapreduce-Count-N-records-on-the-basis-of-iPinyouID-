@@ -1,0 +1,82 @@
+### DataSet
+* [data](http://goo.gl/lwgoxw) 
+    * Work only with this files:
+      - bid.20130606.txt.bz2
+      - bid.20130607.txt.bz2
+      - bid.20130608.txt.bz2
+      - bid.20130609.txt.bz2
+      - bid.20130610.txt.bz2
+      - bid.20130611.txt.bz2
+      - bid.20130612.txt.bz2
+
+- [More detailed data description](http://contest.ipinyou.com/ipinyou-dataset.pdf)
+    * The bidding log data format
+
+    SN      | Column            |  Example
+    |-------|:-----------------:|----------------------------:|
+    ∗1      | BidID     | c0550000008e5a94ac18823d6f275121
+    2       | Timestamp | 20130218134701883
+    ∗3      |iPinYouID  | 35605620124122340227135
+    4       |User-Agent | Mozilla/5.0 (Windows NT 5.1)\AppleWebKit/535.11 (KHTML,\like Gecko) Chrome/17.0.963.84\Safari/535.11 SE 2.X MetaSr 1.0
+    ∗5      |IP         | 119.163.222.
+    ∗6      |RegionID   |146
+    7       |CityID     |147
+    8       |AdExchange |2
+    ∗9      |Domain     |e80f4ec7f5bfbc9ca416a8c01cd1a049
+    ∗10     |URL        |hz55b000008e5a94ac18823d6f275121
+    11      |Anonymous URL  | null
+    12      |Ad Slot ID     |973726...9023493
+    13      |Ad Slot Width  |300
+    14      |Ad Slot Height |250
+    15      |Ad Slot Visibility|    FirstView
+    16      |Ad Slot Format | Na
+    17      |Ad Slot Floor Price|   0
+    18      |Creative ID    | f80f4ec7f5bfbc9ca416a8c01cd1a049
+    ∗19     | Bidding Price | 573
+    20      |Advertiser ID  | 2259
+    ∗21     |User Profile IDs   | null
+
+Columns with * means the data in the column is hashed or modified before the log is released
+
+
+# Tasks:
+
+1. Play with HDFS service (reproduce and play with the commands)
+    1. hdfs dfs 
+        -  -put
+        -  -get
+        -  -ls
+        -  -text
+    2. hdfs dfsadmin
+        - -report
+        - -printTopology
+3. Unzip these files and put them in HDFS system
+4. Count amount of records for each *iPinyouID* from all files:
+    - sort **by count in a DESC** order
+    - write **TOP-100** result into bid_result.txt file on HDFS system 
+   no Spark)
+5. Measure the whole process time, memory consumptions, others resources utilization
+6. Try to optimize JVM, GC parameters, like:
+```
+    -Xms8g -Xmx8g -Xmn2g -XX:PermSize=64M -XX:MaxPermSize=256M
+    -XX:-OmitStackTraceInFastThrow -XX:SurvivorRatio=2 
+    -XX:+UseG1GC -XX:NewSize=4g -XX:MaxNewSize=5g 
+    -XX:ConcGCThreads -XX:+UseStringDeduplication
+```
+… or other for Java 8 (Repeat previous measurements and provide you results with your keys).
+7. Prepare performance report in Excel for last two points and attach to homework results.
+    
+# Acceptance criteria
+        - only HDFS API and plain java (scala), no MR paradigm, no Hive, no Spark
+    
+# Expected outputs:
+0. ZIP-ed src folder with your implementation
+1. Command line with your arguments (at least 5 experiments)
+2. Attached screenshots with different HDFD commands.
+3. Screenshot #4 with imported in HDFS files.
+4. Performance report (more than 10 experiments with different settings)
+5. bid_result.txt
+
+# Hints:
+    - Main goals of this taks is became familar with HDSF API. Also it is to understand JMV Internals (Memory structure, GC Algorithms) 
+    and how it can impact on performance.
